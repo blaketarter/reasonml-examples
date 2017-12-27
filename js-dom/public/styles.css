@@ -1,0 +1,11 @@
+#app .Fizz {
+  background-color: lightcoral;
+}
+
+#app .Buzz {
+  background-color: lightseagreen;
+}
+
+#app .FizzBuzz {
+  background-color: lightgreen;
+}
