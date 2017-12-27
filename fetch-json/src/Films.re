@@ -1,4 +1,4 @@
-type film = {
+type t = {
   title: string,
   url: string,
 };

@@ -1,4 +1,4 @@
-type person = {
+type t = {
   name: string,
   url: string,
 };
