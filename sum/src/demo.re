@@ -6,9 +6,12 @@
 }; */
 
 /* Second implementation */
-let sum = (l: list(int)) => {
+/* let sum = (l: list(int)) => {
   List.fold_left((a, b) => a + b, 0, l);
-};
+}; */
+
+/* Third */
+let sum = List.fold_left((+), 0);
 
 let foo = [1, 2, 3, 4, 5];
 
