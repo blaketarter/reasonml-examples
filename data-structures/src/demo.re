@@ -22,7 +22,7 @@ module LinkedList = {
     let rec revAux = (l1: t('a), l2: t('a)) => {
       switch l1 {
       | Empty => l2
-      | Head(a, l) => revAux(l, Head(a, l2))
+      | Head(a, l) => revAux(l, prepend(a, l2))
       }
     };
 
@@ -44,18 +44,29 @@ module LinkedList = {
     let rec mapAux = (f: ('a) => 'b, l1: t('a), l2: t('a)) => {
       switch l1 {
       | Empty => l2
-      | Head(x, y) => mapAux(f, y, Head(f(x), l2))
+      | Head(x, y) => mapAux(f, y, prepend(f(x), l2))
       }
     };
 
     (f: ('a) => 'b, ll: t('a)) => mapAux(f, ll, Empty) |> rev
   };
 
+  let reduce = {
+    let rec reduceAux = (f: ('a, 'b) => 'a, ll: t('b), x: 'a) => {
+      switch ll {
+      | Empty => x
+      | Head(a, b) => reduceAux(f, b, f(x, a))
+      }
+    };
+
+    (f: ('a, 'b) => 'a, ll: t('b), x: 'a) => reduceAux(f, ll, x)
+  };
+
   let filter = {
     let rec filterAux = (f: ('a) => bool, l1: t('a), l2: t('a)) => {
       switch l1 {
       | Empty => l2
-      | Head(x, y) => f(x) ? filterAux(f, y, Head(x, l2)) : filterAux(f, y, l2)
+      | Head(x, y) => f(x) ? filterAux(f, y, prepend(x, l2)) : filterAux(f, y, l2)
       }
     };
 
@@ -103,23 +114,23 @@ module LinkedList = {
     let rec fromListAux = (l: list('a), ll: t('a)) => {
       switch l {
       | [] => ll
-      | [a, ...b] => fromListAux(b, Head(a, ll))
+      | [a, ...b] => fromListAux(b, prepend(a, ll))
       }
     };
 
     (l: list('a)) => fromListAux(l, Empty) |> rev
   };
 
-  /* let fromArray = {
-    let rec fromArrayAux = (a: array('a), ll: t('a)) => {
+  let fromArray = {
+    let fromArrayAux = (a: array('a), ll: t('a)) => {
       switch a {
       | [||] => ll
-      | [|a, ...b|] => fromArrayAux(b, Head(a, ll))
+      | _ => Array.fold_right((curr, acc) => prepend(curr, acc), a, ll)
       }
     };
 
-    (l: array('a)) => fromArrayAux(l, Empty) |> rev
-  }; */
+    (l: array('a)) => fromArrayAux(l, Empty)
+  };
 
   module Infix = {
     let (@:) = (a, b) => Head(a, b);
@@ -128,7 +139,7 @@ module LinkedList = {
 
 open LinkedList.Infix;
 
-let foo: LinkedList.t(int) = Head(0, Head(1, Head(2, Empty)));
+/* let foo: LinkedList.t(int) = Head(0, Head(1, Head(2, Empty)));
 
 Js.log("foo");
 Js.log(foo);
@@ -179,4 +190,11 @@ Js.log("filter");
 LinkedList.filter((n) => n mod 2 === 0, ones) |> Js.log;
 
 Js.log("find");
-LinkedList.find((n) => n === 4, ones) |> Js.log;
+LinkedList.find((n) => n === 4, ones) |> Js.log; */
+
+/* let llFromArray = LinkedList.fromArray([|1, 2, 3, 4, 5|]);
+Js.log(llFromArray); */
+
+/* let oneThroughTen = 1 @: 2 @: 3 @: 4 @: 5 @: 6 @: 7 @: 8 @: 9 @: 10 @: Empty;
+let total = LinkedList.reduce((total, curr) => total + curr, oneThroughTen, 0);
+Js.log(total); */
