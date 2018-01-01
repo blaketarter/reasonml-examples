@@ -37,7 +37,9 @@ function prepend(x, ll) {
         ];
 }
 
-function revAux(_l1, _l2) {
+function rev(ll) {
+  var _l1 = ll;
+  var _l2 = /* Empty */0;
   while(true) {
     var l2 = _l2;
     var l1 = _l1;
@@ -53,10 +55,6 @@ function revAux(_l1, _l2) {
       return l2;
     }
   };
-}
-
-function rev(ll) {
-  return revAux(ll, /* Empty */0);
 }
 
 function forEach(f, _ll) {
@@ -79,7 +77,7 @@ function forEach(f, _ll) {
   };
 }
 
-function mapAux(f, _l1, _l2) {
+function map(f, _l1, _l2) {
   while(true) {
     var l2 = _l2;
     var l1 = _l1;
@@ -95,10 +93,6 @@ function mapAux(f, _l1, _l2) {
       return l2;
     }
   };
-}
-
-function map(f, ll) {
-  return revAux(mapAux(f, ll, /* Empty */0), /* Empty */0);
 }
 
 function reduce(f, ll, x) {
@@ -147,7 +141,7 @@ function filterAux(f, _l1, _l2) {
 }
 
 function filter(f, ll) {
-  return revAux(filterAux(f, ll, /* Empty */0), /* Empty */0);
+  return rev(filterAux(f, ll, /* Empty */0));
 }
 
 function find(f, _ll) {
@@ -234,7 +228,7 @@ function fromListAux(_l, _ll) {
 }
 
 function fromList(l) {
-  return revAux(fromListAux(l, /* Empty */0), /* Empty */0);
+  return rev(fromListAux(l, /* Empty */0));
 }
 
 function fromArray(l) {
@@ -261,22 +255,18 @@ function $at$colon(a, b) {
 
 var Infix = /* module */[/* @: */$at$colon];
 
-var LinkedList = /* module */[
-  /* head */head,
-  /* tail */tail,
-  /* prepend */prepend,
-  /* rev */rev,
-  /* forEach */forEach,
-  /* map */map,
-  /* reduce */reduce,
-  /* filter */filter,
-  /* find */find,
-  /* length */length,
-  /* nth */nth,
-  /* fromList */fromList,
-  /* fromArray */fromArray,
-  /* Infix */Infix
-];
-
-exports.LinkedList = LinkedList;
+exports.head      = head;
+exports.tail      = tail;
+exports.prepend   = prepend;
+exports.rev       = rev;
+exports.forEach   = forEach;
+exports.map       = map;
+exports.reduce    = reduce;
+exports.filter    = filter;
+exports.find      = find;
+exports.length    = length;
+exports.nth       = nth;
+exports.fromList  = fromList;
+exports.fromArray = fromArray;
+exports.Infix     = Infix;
 /* No side effect */
