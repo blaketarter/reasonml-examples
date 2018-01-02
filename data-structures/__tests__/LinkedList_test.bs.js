@@ -21,11 +21,49 @@ function unwrap(x) {
 }
 
 describe("LinkedList", (function () {
-        Jest.test("Infix Makes Lists", (function () {
+        Jest.test("Infix: Makes Lists", (function () {
                 return Jest.ExpectJs[/* toBeDefined */25](Jest.ExpectJs[/* expect */0](LinkedList$DataStructures.Infix[/* @: */0](0, /* Empty */0)));
               }));
-        return Jest.test("Head gets first item in LinkedList", (function () {
-                      return Jest.Expect[/* toBe */2]("foo", Jest.Expect[/* expect */0](unwrap(LinkedList$DataStructures.head(LinkedList$DataStructures.Infix[/* @: */0]("foo", /* Empty */0)))));
+        Jest.test("Head: gets first item in LinkedList", (function () {
+                var recieved = unwrap(LinkedList$DataStructures.head(LinkedList$DataStructures.Infix[/* @: */0]("foo", /* Empty */0)));
+                return Jest.Expect[/* toBe */2]("foo", Jest.Expect[/* expect */0](recieved));
+              }));
+        Jest.test("Head: returns None on empty list", (function () {
+                var recieved = LinkedList$DataStructures.head(/* Empty */0);
+                return Jest.Expect[/* toBe */2](/* None */0, Jest.Expect[/* expect */0](recieved));
+              }));
+        Jest.test("Tail: gets last item in LinkedList", (function () {
+                var recieved = unwrap(LinkedList$DataStructures.tail(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0)))));
+                return Jest.Expect[/* toBe */2]("baz", Jest.Expect[/* expect */0](recieved));
+              }));
+        Jest.test("Tail: returns None on empty list", (function () {
+                var recieved = LinkedList$DataStructures.tail(/* Empty */0);
+                return Jest.Expect[/* toBe */2](/* None */0, Jest.Expect[/* expect */0](recieved));
+              }));
+        Jest.test("Prepend: adds item to begining of LinkedList", (function () {
+                var recieved = unwrap(LinkedList$DataStructures.head(LinkedList$DataStructures.prepend("fizz", LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))))));
+                return Jest.Expect[/* toBe */2]("fizz", Jest.Expect[/* expect */0](recieved));
+              }));
+        Jest.test("Length: Gets length of LinkedList", (function () {
+                var received = LinkedList$DataStructures.length(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))));
+                return Jest.Expect[/* toBe */2](3, Jest.Expect[/* expect */0](received));
+              }));
+        Jest.test("Nth: gets item at n location", (function () {
+                var received = unwrap(LinkedList$DataStructures.nth(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))), 2));
+                return Jest.Expect[/* toBe */2]("baz", Jest.Expect[/* expect */0](received));
+              }));
+        Jest.test("Nth: returns None on out of bounds n value", (function () {
+                var received = LinkedList$DataStructures.nth(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))), 5);
+                return Jest.Expect[/* toBe */2](/* None */0, Jest.Expect[/* expect */0](received));
+              }));
+        return Jest.test("Rev: reverses LinkedList items", (function () {
+                      var received = LinkedList$DataStructures.rev(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))));
+                      var received0 = unwrap(LinkedList$DataStructures.nth(received, 0));
+                      var received1 = unwrap(LinkedList$DataStructures.nth(received, 1));
+                      var received2 = unwrap(LinkedList$DataStructures.nth(received, 2));
+                      Jest.Expect[/* toBe */2]("baz", Jest.Expect[/* expect */0](received0));
+                      Jest.Expect[/* toBe */2]("bar", Jest.Expect[/* expect */0](received1));
+                      return Jest.Expect[/* toBe */2]("foo", Jest.Expect[/* expect */0](received2));
                     }));
       }));
 
