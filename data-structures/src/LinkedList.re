@@ -39,11 +39,15 @@ let rec forEach = (f: ('a) => 'b, ll: t('a)) => {
   }
 };
 
-let rec map = (f: ('a) => 'b, l1: t('a), l2: t('a)) => {
-  switch l1 {
-  | Empty => l2
-  | Head(x, y) => map(f, y, prepend(f(x), l2))
-  }
+let map = {
+  let rec mapAux = (f: ('a) => 'b, l1: t('a), l2: t('a)) => {
+    switch l1 {
+    | Empty => l2
+    | Head(x, y) => mapAux(f, y, prepend(f(x), l2))
+    }
+  };
+
+  (f: ('a) => 'b, ll: t('a)) => mapAux(f, ll, Empty) |> rev
 };
 
 let reduce = {

@@ -77,7 +77,7 @@ function forEach(f, _ll) {
   };
 }
 
-function map(f, _l1, _l2) {
+function mapAux(f, _l1, _l2) {
   while(true) {
     var l2 = _l2;
     var l1 = _l1;
@@ -93,6 +93,10 @@ function map(f, _l1, _l2) {
       return l2;
     }
   };
+}
+
+function map(f, ll) {
+  return rev(mapAux(f, ll, /* Empty */0));
 }
 
 function reduce(f, ll, x) {

@@ -2,6 +2,10 @@ open Jest;
 open LinkedList;
 open! LinkedList.Infix;
 
+[@bs.send] external call : ([@bs] ('a => 'b), 'c, 'a) => 'b = "";
+
+let call = (self, arg) => call(self, (), arg);
+
 let unwrap = (x: option('a)) => {
   switch x {
     | Some(value) => value
@@ -9,9 +13,9 @@ let unwrap = (x: option('a)) => {
 };
 
 describe("LinkedList", () => {
-  test("Infix: Makes Lists", () => ExpectJs.(expect(Js.Undefined.return(0 @: Empty)) |> toBeDefined));
+  test("infix: Makes Lists", () => ExpectJs.(expect(Js.Undefined.return(0 @: Empty)) |> toBeDefined));
 
-  test("Head: gets first item in LinkedList", () => {
+  test("head: gets first item in LinkedList", () => {
     open Expect;
 
     let recieved = LinkedList.head("foo" @: Empty) |> unwrap;
@@ -20,7 +24,7 @@ describe("LinkedList", () => {
     expect(recieved) |> toBe(expected)
   });
 
-  test("Head: returns None on empty list", () => {
+  test("head: returns None on empty list", () => {
     open Expect;
 
     let recieved = LinkedList.head(Empty);
@@ -29,7 +33,7 @@ describe("LinkedList", () => {
     expect(recieved) |> toBe(expected)
   });
 
-  test("Tail: gets last item in LinkedList", () => {
+  test("tail: gets last item in LinkedList", () => {
     open Expect;
 
     let recieved = LinkedList.tail("foo" @: "bar" @: "baz" @: Empty) |> unwrap;
@@ -38,7 +42,7 @@ describe("LinkedList", () => {
     expect(recieved) |> toBe(expected)
   });
 
-  test("Tail: returns None on empty list", () => {
+  test("tail: returns None on empty list", () => {
     open Expect;
 
     let recieved = LinkedList.tail(Empty);
@@ -47,7 +51,7 @@ describe("LinkedList", () => {
     expect(recieved) |> toBe(expected)
   });
 
-  test("Prepend: adds item to begining of LinkedList", () => {
+  test("prepend: adds item to begining of LinkedList", () => {
     open Expect;
 
     let recieved = LinkedList.prepend("fizz", "foo" @: "bar" @: "baz" @: Empty) |> LinkedList.head |> unwrap;
@@ -56,7 +60,7 @@ describe("LinkedList", () => {
     expect(recieved) |> toBe(expected)
   });
 
-  test("Length: Gets length of LinkedList", () => {
+  test("length: Gets length of LinkedList", () => {
     open Expect;
 
     let received = LinkedList.length("foo" @: "bar" @: "baz" @: Empty);
@@ -65,7 +69,7 @@ describe("LinkedList", () => {
     expect(received) |> toBe(expected)
   });
 
-  test("Nth: gets item at n location", () => {
+  test("nth: gets item at n location", () => {
     open Expect;
 
     let received = LinkedList.nth("foo" @: "bar" @: "baz" @: Empty, 2) |> unwrap;
@@ -74,7 +78,7 @@ describe("LinkedList", () => {
     expect(received) |> toBe(expected)
   });
 
-  test("Nth: returns None on out of bounds n value", () => {
+  test("nth: returns None on out of bounds n value", () => {
     open Expect;
 
     let received = LinkedList.nth("foo" @: "bar" @: "baz" @: Empty, 5);
@@ -83,19 +87,82 @@ describe("LinkedList", () => {
     expect(received) |> toBe(expected)
   });
 
-  test("Rev: reverses LinkedList items", () => {
+  test("rev: reverses LinkedList items", () => {
     open Expect;
 
     let received = LinkedList.rev("foo" @: "bar" @: "baz" @: Empty);
-    let received0 = LinkedList.nth(received, 0) |> unwrap;
-    let received1 = LinkedList.nth(received, 1) |> unwrap;
-    let received2 = LinkedList.nth(received, 2) |> unwrap;
-    let expected0 = "baz";
-    let expected1 = "bar";
-    let expected2 = "foo";
+    let expected = "baz" @: "bar" @: "foo" @: Empty;
 
-    expect(received0) |> toBe(expected0);
-    expect(received1) |> toBe(expected1);
-    expect(received2) |> toBe(expected2);
+    expect(received) |> toEqual(expected)
+  });
+
+  test("forEach: calls the function for each item", () => {
+    open ExpectJs;
+    let mockFn = JestJs.inferred_fn();
+    let fn = MockJs.fn(mockFn);
+
+    let list = "foo" @: "bar" @: "baz" @: Empty;
+    let _ = LinkedList.forEach((x) => {
+      let _ = call(fn, x);
+      ()
+    }, list);
+    let received = mockFn |> MockJs.calls;
+    let expected = [| "foo", "bar", "baz" |];
+
+    expect(received) |> toEqual(expected)
+  });
+
+  test("map: transforms the LinkedList", () => {
+    open Expect;
+    
+    let received = LinkedList.map((a) => a ++ "!", "foo" @: "bar" @: "baz" @: Empty);
+    let expected = "foo!" @: "bar!" @: "baz!" @: Empty;
+
+    expect(received) |> toEqual(expected)
+  });
+
+  test("reduce: reduces a LinkedList to a single value", () => {
+    open Expect;
+
+    let received = LinkedList.reduce((acc, v) => acc + v, 0 @: 1 @: 2 @: Empty, 0);
+    let expected = 3;
+
+    expect(received) |> toBe(expected)
+  });
+
+  test("filter: filters a LinkedList to a subset of values", () => {
+    open Expect;
+
+    let received = LinkedList.filter((v) => v > 1, 0 @: 1 @: 2 @: Empty);
+    let expected = 2 @: Empty;
+
+    expect(received) |> toEqual(expected)
+  });
+
+  test("find: finds a single item that matches a condition", () => {
+    open Expect;
+
+    let received = LinkedList.find((v) => v === 1, 0 @: 1 @: 2 @: Empty);
+    let expected = Some(1);
+
+    expect(received) |> toEqual(expected)
+  });
+
+  test("fromList: transforms a list to a linkedList", () => {
+    open Expect;
+
+    let received = LinkedList.fromList(["foo", "bar", "baz"]);
+    let expected = "foo" @: "bar" @: "baz" @: Empty;
+
+    expect(received) |> toEqual(expected)
+  });
+
+  test("fromArray: transforms an array to a linkedList", () => {
+    open Expect;
+
+    let received = LinkedList.fromArray([|"foo", "bar", "baz"|]);
+    let expected = "foo" @: "bar" @: "baz" @: Empty;
+
+    expect(received) |> toEqual(expected)
   });
 });
