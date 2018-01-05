@@ -2,26 +2,10 @@
 'use strict';
 
 var Jest                      = require("@glennsl/bs-jest/src/jest.js");
-var Caml_builtin_exceptions   = require("bs-platform/lib/js/caml_builtin_exceptions.js");
 var LinkedList$DataStructures = require("../src/LinkedList.bs.js");
 
 function call(self, arg) {
   return self.call(/* () */0, arg);
-}
-
-function unwrap(x) {
-  if (x) {
-    return x[0];
-  } else {
-    throw [
-          Caml_builtin_exceptions.match_failure,
-          [
-            "/Users/blaketarter/Sites/reasonml-examples/data-structures/__tests__/LinkedList_test.re",
-            9,
-            32
-          ]
-        ];
-  }
 }
 
 describe("LinkedList", (function () {
@@ -29,36 +13,44 @@ describe("LinkedList", (function () {
                 return Jest.ExpectJs[/* toBeDefined */25](Jest.ExpectJs[/* expect */0](LinkedList$DataStructures.Infix[/* @: */0](0, /* Empty */0)));
               }));
         Jest.test("head: gets first item in LinkedList", (function () {
-                var recieved = unwrap(LinkedList$DataStructures.head(LinkedList$DataStructures.Infix[/* @: */0]("foo", /* Empty */0)));
-                return Jest.Expect[/* toBe */2]("foo", Jest.Expect[/* expect */0](recieved));
+                var recieved = LinkedList$DataStructures.head(LinkedList$DataStructures.Infix[/* @: */0]("foo", /* Empty */0));
+                return Jest.Expect[/* toEqual */12](/* Some */["foo"], Jest.Expect[/* expect */0](recieved));
               }));
         Jest.test("head: returns None on empty list", (function () {
                 var recieved = LinkedList$DataStructures.head(/* Empty */0);
-                return Jest.Expect[/* toBe */2](/* None */0, Jest.Expect[/* expect */0](recieved));
+                return Jest.Expect[/* toEqual */12](/* None */0, Jest.Expect[/* expect */0](recieved));
               }));
         Jest.test("tail: gets last item in LinkedList", (function () {
-                var recieved = unwrap(LinkedList$DataStructures.tail(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0)))));
-                return Jest.Expect[/* toBe */2]("baz", Jest.Expect[/* expect */0](recieved));
+                var recieved = LinkedList$DataStructures.tail(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))));
+                return Jest.Expect[/* toEqual */12](/* Some */["baz"], Jest.Expect[/* expect */0](recieved));
               }));
         Jest.test("tail: returns None on empty list", (function () {
                 var recieved = LinkedList$DataStructures.tail(/* Empty */0);
-                return Jest.Expect[/* toBe */2](/* None */0, Jest.Expect[/* expect */0](recieved));
+                return Jest.Expect[/* toEqual */12](/* None */0, Jest.Expect[/* expect */0](recieved));
               }));
         Jest.test("prepend: adds item to begining of LinkedList", (function () {
-                var recieved = unwrap(LinkedList$DataStructures.head(LinkedList$DataStructures.prepend("fizz", LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))))));
-                return Jest.Expect[/* toBe */2]("fizz", Jest.Expect[/* expect */0](recieved));
+                var recieved = LinkedList$DataStructures.head(LinkedList$DataStructures.prepend("fizz", LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0)))));
+                return Jest.Expect[/* toEqual */12](/* Some */["fizz"], Jest.Expect[/* expect */0](recieved));
               }));
         Jest.test("length: Gets length of LinkedList", (function () {
                 var received = LinkedList$DataStructures.length(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))));
-                return Jest.Expect[/* toBe */2](3, Jest.Expect[/* expect */0](received));
+                return Jest.Expect[/* toEqual */12](3, Jest.Expect[/* expect */0](received));
+              }));
+        Jest.test("length: Gets length of 0 on Empty LinkedList", (function () {
+                var received = LinkedList$DataStructures.length(/* Empty */0);
+                return Jest.Expect[/* toEqual */12](0, Jest.Expect[/* expect */0](received));
               }));
         Jest.test("nth: gets item at n location", (function () {
-                var received = unwrap(LinkedList$DataStructures.nth(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))), 2));
-                return Jest.Expect[/* toBe */2]("baz", Jest.Expect[/* expect */0](received));
+                var received = LinkedList$DataStructures.nth(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))), 2);
+                return Jest.Expect[/* toEqual */12](/* Some */["baz"], Jest.Expect[/* expect */0](received));
               }));
         Jest.test("nth: returns None on out of bounds n value", (function () {
                 var received = LinkedList$DataStructures.nth(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))), 5);
-                return Jest.Expect[/* toBe */2](/* None */0, Jest.Expect[/* expect */0](received));
+                return Jest.Expect[/* toEqual */12](/* None */0, Jest.Expect[/* expect */0](received));
+              }));
+        Jest.test("nth: returns None on Empty Match", (function () {
+                var received = LinkedList$DataStructures.nth(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))), 3);
+                return Jest.Expect[/* toEqual */12](/* None */0, Jest.Expect[/* expect */0](received));
               }));
         Jest.test("rev: reverses LinkedList items", (function () {
                 var received = LinkedList$DataStructures.rev(LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0))));
@@ -80,6 +72,16 @@ describe("LinkedList", (function () {
                 ];
                 return Jest.ExpectJs[/* toEqual */12](expected, Jest.ExpectJs[/* expect */0](received));
               }));
+        Jest.test("forEach: does not call the function on an empty LinkedList", (function () {
+                var mockFn = jest.fn();
+                LinkedList$DataStructures.forEach((function (x) {
+                        mockFn.call(/* () */0, x);
+                        return /* () */0;
+                      }), /* Empty */0);
+                var received = Jest.MockJs[/* calls */0](mockFn);
+                var expected = /* array */[];
+                return Jest.ExpectJs[/* toEqual */12](expected, Jest.ExpectJs[/* expect */0](received));
+              }));
         Jest.test("map: transforms the LinkedList", (function () {
                 var received = LinkedList$DataStructures.map((function (a) {
                         return a + "!";
@@ -91,7 +93,7 @@ describe("LinkedList", (function () {
                 var received = LinkedList$DataStructures.reduce((function (acc, v) {
                         return acc + v | 0;
                       }), LinkedList$DataStructures.Infix[/* @: */0](0, LinkedList$DataStructures.Infix[/* @: */0](1, LinkedList$DataStructures.Infix[/* @: */0](2, /* Empty */0))), 0);
-                return Jest.Expect[/* toBe */2](3, Jest.Expect[/* expect */0](received));
+                return Jest.Expect[/* toEqual */12](3, Jest.Expect[/* expect */0](received));
               }));
         Jest.test("filter: filters a LinkedList to a subset of values", (function () {
                 var received = LinkedList$DataStructures.filter((function (v) {
@@ -105,6 +107,12 @@ describe("LinkedList", (function () {
                         return +(v === 1);
                       }), LinkedList$DataStructures.Infix[/* @: */0](0, LinkedList$DataStructures.Infix[/* @: */0](1, LinkedList$DataStructures.Infix[/* @: */0](2, /* Empty */0))));
                 return Jest.Expect[/* toEqual */12](/* Some */[1], Jest.Expect[/* expect */0](received));
+              }));
+        Jest.test("find: returns none if no match is found", (function () {
+                var received = LinkedList$DataStructures.find((function (v) {
+                        return +(v === 3);
+                      }), LinkedList$DataStructures.Infix[/* @: */0](0, LinkedList$DataStructures.Infix[/* @: */0](1, LinkedList$DataStructures.Infix[/* @: */0](2, /* Empty */0))));
+                return Jest.Expect[/* toEqual */12](/* None */0, Jest.Expect[/* expect */0](received));
               }));
         Jest.test("fromList: transforms a list to a linkedList", (function () {
                 var received = LinkedList$DataStructures.fromList(/* :: */[
@@ -120,17 +128,24 @@ describe("LinkedList", (function () {
                 var expected = LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0)));
                 return Jest.Expect[/* toEqual */12](expected, Jest.Expect[/* expect */0](received));
               }));
-        return Jest.test("fromArray: transforms an array to a linkedList", (function () {
-                      var received = LinkedList$DataStructures.fromArray(/* array */[
-                            "foo",
-                            "bar",
-                            "baz"
-                          ]);
-                      var expected = LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0)));
-                      return Jest.Expect[/* toEqual */12](expected, Jest.Expect[/* expect */0](received));
+        Jest.test("fromList: transforms an empty list to an empty linkedList", (function () {
+                var received = LinkedList$DataStructures.fromList(/* [] */0);
+                return Jest.Expect[/* toEqual */12](/* Empty */0, Jest.Expect[/* expect */0](received));
+              }));
+        Jest.test("fromArray: transforms an array to a linkedList", (function () {
+                var received = LinkedList$DataStructures.fromArray(/* array */[
+                      "foo",
+                      "bar",
+                      "baz"
+                    ]);
+                var expected = LinkedList$DataStructures.Infix[/* @: */0]("foo", LinkedList$DataStructures.Infix[/* @: */0]("bar", LinkedList$DataStructures.Infix[/* @: */0]("baz", /* Empty */0)));
+                return Jest.Expect[/* toEqual */12](expected, Jest.Expect[/* expect */0](received));
+              }));
+        return Jest.test("fromArray: transforms an empty array to an empty linkedList", (function () {
+                      var received = LinkedList$DataStructures.fromArray(/* array */[]);
+                      return Jest.Expect[/* toEqual */12](/* Empty */0, Jest.Expect[/* expect */0](received));
                     }));
       }));
 
-exports.call   = call;
-exports.unwrap = unwrap;
+exports.call = call;
 /*  Not a pure module */
