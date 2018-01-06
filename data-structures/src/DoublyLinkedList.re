@@ -1,10 +1,10 @@
-/* https://rosettacode.org/wiki/Doubly-linked_list/Element_definition#Functional */
-type t('a) = Node(list('a), 'a, list('a));
+type t('a) = Empty | Node(list('a), 'a, list('a));
 
 let make = (x: 'a) => Node([], x, []);
 
 let prepend = (x: 'a, y: t('a)) => {
   switch (y) {
+    | Empty => make(x)
     | Node(a, b, c) => {
       switch a {
       | [] => Node([x], b, c)
@@ -16,6 +16,7 @@ let prepend = (x: 'a, y: t('a)) => {
 
 let append = (x: t('a), y: 'a) => {
   switch x {
+    | Empty => make(y)
     | Node(a, b, c) => {
       switch c {
       | [] => Node(a, b, [y])
@@ -27,9 +28,9 @@ let append = (x: t('a), y: 'a) => {
 
 let prev = (x: t('a)) => {
   switch x {
+    | Empty => None
     | Node(a, b, c) => {
-      let aRev = List.rev(a);
-      switch aRev {
+      switch (List.rev(a)) {
         | [] => None
         | [h, ...t] => Some(Node(t, h, [b, ...c]))
       }
@@ -39,6 +40,7 @@ let prev = (x: t('a)) => {
 
 let next = (x: t('a)) => {
   switch x {
+    | Empty => None
     | Node(a, b, c) => {
       switch c {
         | [] => None
@@ -50,25 +52,47 @@ let next = (x: t('a)) => {
 
 let curr = (x: t('a)) => {
   switch x {
-    | Node(_, b, _) => b
+    | Empty => None
+    | Node(_, b, _) => Some(b)
   }
 };
 
-/* forEach, map, filter, reduce, nth, fromList, fromArray */
+let fromList = (l: list('a)) => {
+  switch l {
+  | [] => Empty
+  | [h, ...t] => Node([], h, t)
+  }
+};
+
+let fromArray = (l: array('a)) => {
+  switch l {
+  | [||] => Empty
+  | _ => Node([], l[0], Array.sub(l, 1, Array.length(l) - 1) |> Array.to_list)
+  }
+};
 
 module Maybe = {
   let curr = (x: option(t('a))) => {
     switch x {
     | None => None
-    | Some(x) => Some(curr(x))
+    | Some(x) => curr(x)
     }
   };
 };
 
-let bar = make("bar");
+/* let bar = make("bar");
 let fooBar = prepend("foo", bar);
 let fooBarBaz = append(fooBar, "baz");
+
 Js.log(fooBarBaz);
 Js.log(fooBarBaz |> curr);
 Js.log(prev(fooBarBaz) |> Maybe.curr);
 Js.log(next(fooBarBaz) |> Maybe.curr);
+
+Js.log("============");
+
+let oflist = fromList(["hello", "world"]);
+let ofArray = fromArray([|"hello", "world"|]);
+
+Js.log(oflist);
+Js.log(ofArray); */
