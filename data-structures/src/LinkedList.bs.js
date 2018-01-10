@@ -4,6 +4,13 @@
 var $$Array = require("bs-platform/lib/js/array.js");
 var Curry   = require("bs-platform/lib/js/curry.js");
 
+function make(x) {
+  return /* Head */[
+          x,
+          /* Empty */0
+        ];
+}
+
 function head(ll) {
   if (ll) {
     return /* Some */[ll[0]];
@@ -259,6 +266,7 @@ function $at$colon(a, b) {
 
 var Infix = /* module */[/* @: */$at$colon];
 
+exports.make      = make;
 exports.head      = head;
 exports.tail      = tail;
 exports.prepend   = prepend;

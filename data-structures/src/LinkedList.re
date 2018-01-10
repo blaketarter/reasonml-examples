@@ -1,5 +1,7 @@
 type t('a) = Empty | Head('a, t('a));
 
+let make = (x: 'a) => Head(x, Empty);
+
 let head = (ll: t('a)) => {
   switch ll {
   | Empty => None
